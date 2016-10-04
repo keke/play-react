@@ -4,16 +4,19 @@ import RuleIcon from 'material-ui/svg-icons/hardware/device-hub';
 import EndpointIcon from 'material-ui/svg-icons/av/album';
 import Avatar from 'material-ui/Avatar';
 import FlatButton from 'material-ui/FlatButton';
-import EndpintContent from './EndpointContent';
+import EndpointContent from './EndpointContent';
 
 import {
 blue500,
 grey500,
+orange500,
 } from 'material-ui/styles/colors';
+
+const avatarSize = 25
 
 class CxCard extends Component{
   updateTitle = (state)=>{
-    var model = this.props.model;
+    var model = this.props.value;
     if(state === 'new'){
       if (model.type==='endpoint'){
         return 'Create a New Endpoint';
@@ -29,29 +32,31 @@ class CxCard extends Component{
     }
   };
   updateAvatar  = (state)=>{
-    var model = this.props.model;
-    if(state === 'new'){
-      if (model.type==='endpoint'){
-        return <Avatar icon={<EndpointIcon/>} color={blue500} size={20}/>
-      }
+    var model = this.props.value;
+    if (model.type==='endpoint'){
+      return <Avatar icon={<EndpointIcon/>}
+        backgroundColor={this.updateColor(state)}
+        size={avatarSize}/>
     }else{
-      if(model.type==='endpoint'){
-        return <Avatar icon={<EndpointIcon/>} color={grey500} size={20}/>
-      }
+      return <Avatar icon={<RuleIcon/>}
+      backgroundColor={this.updateColor(state)}
+      size={avatarSize}/>
     }
   };
   updateColor = (state)=>{
     if(state==='new'){
       return blue500;
-    } else {
+    } else if(state === 'modified') {
+      return orange500;
+    }else{
       return grey500;
     }
   }
   constructor (props) {
     super(props);
-
     this.state = {
-      state: this.props.model.state
+      state: this.props.value.state,
+      model: this.props.value
     }
   };
 
@@ -63,12 +68,19 @@ class CxCard extends Component{
 
   doDelete = (event)=>{
 
+  };
+  changeContent = (e , t) =>{
+    e.preventDefault();
+    console.log('content is changed', t);
+    if(this.state.state === 'saved'){
+      this.setState({state:'modified'});
+    }
   }
 
   render(){
     var content = null;
-    if (this.props.model.type==='endpoint'){
-      content = <EndpintContent/>
+    if (this.props.value.type==='endpoint'){
+      content = <EndpointContent onChange={this.changeContent} value={this.state.model}/>
     }
     return (
       <Card>

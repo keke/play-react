@@ -62,11 +62,17 @@ class Header extends Component{
     this.setState({
       addPopoverOpen: false,
     });
-    this.props.onAddNew({
+    var model = {
       type: menuItem.props.value,
-      state: 'new',
-      id: 'new_'+genId()
-    });
+      state: 'new'
+    };
+    if(menuItem.props.value === 'endpoint'){
+      model.name = '';
+      model.url = ''
+    }else{
+
+    }
+    this.props.onAddNew(model);
   };
 
   render(){

@@ -4,9 +4,9 @@ import CxCard from './CxCard'
 
 class MainPanel extends Component{
   render(){
-    var cards = this.props.cards.map((model)=>{
+    var cards = this.props.cards.map((model, i)=>{
       return (
-        <CxCard key={model.id} model={model}>
+        <CxCard key={i} value={model}>
         </CxCard>
       )
     });
